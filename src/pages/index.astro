@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const tags = [...new Set(posts.map((p) => p.data.tag))];
+
+const chars = posts.reduce(
+  (n, p) =>
+    n +
+    (p.body ?? '')
+      .replace(/<!--[\s\S]*?-->/g, '')
+      .replace(/\s/g, '').length +
+    p.data.excerpt.replace(/\s/g, '').length,
+  0
+);
+
+const firstYear = posts.length ? Math.min(...posts.map((p) => p.data.pubDate.getFullYear())) : new Date().getFullYear();
+const years = Math.max(new Date().getFullYear() - firstYear + 1, 1);
+
+---
+
+<BaseLayout title="微光集 · 关于代码与生活的笔记">
+  <section class="hero">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="hero-inner" id="heroInner">
+      <div class="eyebrow"><span>●</span> Since {firstYear} · 第 {posts.length} 篇</div>
+      <h1>
+        <span class="line"><i>在代码与生活之间，</i></span>
+        <span class="line"><i>写下一些<em>微光</em>。</i></span>
+      </h1>
+      <p class="hero-sub">
+        这里记录界面设计里的取舍、工程实现中的弯路，以及那些深夜突然想明白的小事。
+        不追求最快，只希望每篇都值得重读一次。
+      </p>
+      <div class="type-wrap">
+        <span id="typed"></span><span class="cursor"></span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#posts" class="btn btn-primary">
+          开始阅读
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#about" class="btn btn-ghost">
+          关于我
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="num"><span data-count={posts.length}>0</span><small>篇</small></div>
+          <div class="lbl">文章</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span data-count={tags.length}>0</span><small>个</small></div>
+          <div class="lbl">标签</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span data-count={years}>0</span><small>年</small></div>
+          <div class="lbl">持续写作</div>
+        </div>
+        <div class="stat">
+          <div class="num"><span data-count={chars}>0</span><small>+</small></div>
+          <div class="lbl">字</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="rail"></div>
+    </div>
+  </section>
+
+  <section class="section" id="posts">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2><span class="marker"></span>最近写了什么</h2>
+        <p>共 {posts.length} 篇 · 按时间倒序</p>
+      </div>
+
+      <div class="filters reveal" id="filters">
+        <button class="chip active" data-filter="all">全部</button>
+        {tags.map((t) => <button class="chip" data-filter={t}>{t}</button>)}
+      </div>
+
+      <div class="grid" id="grid">
+        {posts.map((post, i) => <PostCard post={post} index={i % 3} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="about reveal">
+        <div>
+          <h2>每个月一封，<br />把值得留下的东西寄给你。</h2>
+          <p>不追热点，不做日更。只在新文章写完的时候发一封，附带一段那阵子在读的书、在听的东西。随时可以退订。</p>
+          <form class="sub-form" id="subForm">
+            <input type="email" placeholder="你的邮箱地址" aria-label="邮箱地址" />
+            <button type="submit" class="btn btn-primary">订阅</button>
+          </form>
+        </div>
+        <div class="about-art">
+          <div class="ring r1"><span class="orbit-dot"></span></div>
+          <div class="ring r2"></div>
+          <div class="core"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import '../scripts/home.js';
+</script>

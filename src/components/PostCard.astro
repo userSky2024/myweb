@@ -1,0 +1,41 @@
+---
+const { post, index = 0 } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+
+const d = post.data.pubDate;
+const dateStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+
+const cls = ['card', post.data.layout !== 'normal' ? post.data.layout : '', 'reveal']
+  .filter(Boolean)
+  .join(' ');
+
+const style = `--i:${index};--c1:${post.data.cover.c1};--c2:${post.data.cover.c2};--c3:${post.data.cover.c3}`;
+---
+
+<article class={cls} data-tag={post.data.tag} style={style}>
+  <div class="cover">
+    <div class="zoomer">
+      <span class="shape s1"></span>
+      <span class="shape s2"></span>
+      <span class="shape s3"></span>
+    </div>
+    {post.data.badge && <span class="badge">{post.data.badge}</span>}
+  </div>
+  <div class="card-body">
+    <div class="meta">
+      <span>{dateStr}</span>
+      <span class="sep"></span>
+      <span>{post.data.minutes} 分钟</span>
+      <span class="sep"></span>
+      <span>{post.data.tag}</span>
+    </div>
+    <h3><a href={`${base}/posts/${post.id}/`}>{post.data.title}</a></h3>
+    <p>{post.data.excerpt}</p>
+    <div class="card-foot">
+      <span class="tag">{post.data.tag}</span>
+      <a href={`${base}/posts/${post.id}/`} class="arrow" aria-label="阅读全文">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</article>
