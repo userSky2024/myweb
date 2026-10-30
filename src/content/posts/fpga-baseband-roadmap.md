@@ -6,6 +6,7 @@ tag: 工程
 minutes: 8
 layout: wide
 badge: 方向
+image: "/covers/fpga-baseband-roadmap.jpg"
 cover:
   c1: "#cdd6ea"
   c2: "#7b8fc0"

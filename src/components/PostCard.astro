@@ -10,15 +10,21 @@ const cls = ['card', post.data.layout !== 'normal' ? post.data.layout : '', 'rev
   .join(' ');
 
 const style = `--i:${index};--c1:${post.data.cover.c1};--c2:${post.data.cover.c2};--c3:${post.data.cover.c3}`;
+
+const img = post.data.image ? `${base}${post.data.image}` : null;
 ---
 
 <article class={cls} data-tag={post.data.tag} style={style}>
-  <div class="cover">
-    <div class="zoomer">
-      <span class="shape s1"></span>
-      <span class="shape s2"></span>
-      <span class="shape s3"></span>
-    </div>
+  <div class:list={['cover', img && 'has-img']}>
+    {img ? (
+      <img class="cover-img" src={img} alt={post.data.title} loading="lazy" decoding="async" width="600" height="372" />
+    ) : (
+      <div class="zoomer">
+        <span class="shape s1"></span>
+        <span class="shape s2"></span>
+        <span class="shape s3"></span>
+      </div>
+    )}
     {post.data.badge && <span class="badge">{post.data.badge}</span>}
   </div>
   <div class="card-body">

@@ -24,6 +24,7 @@ tag: 随笔
 minutes: 5
 layout: normal      # normal | featured(占两列) | wide(整行)
 badge: Featured     # 可选，封面左上角徽标
+image: "/covers/foo.jpg"  # 可选，用真实图片当封面（放 public/covers/ 下）；写了就忽略下面的渐变
 cover:
   c1: "#f8d5bd"
   c2: "#e8a882"
@@ -32,6 +33,8 @@ cover:
 
 正文从这里开始，支持标准 Markdown。
 ```
+
+不写 `image` 时，封面是 `cover.c1~c3` 三个颜色生成的几何渐变；写了 `image` 就用图片，首页卡片和文章页顶部都会显示。
 
 保存后首页卡片、筛选标签、统计数字、RSS 全部自动更新，不需要改任何 HTML。
 

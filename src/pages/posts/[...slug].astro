@@ -33,6 +33,12 @@ const dateStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}
         <p class="post-lead">{post.data.excerpt}</p>
       </header>
 
+      {post.data.image && (
+        <figure class="post-cover reveal">
+          <img src={`${base}${post.data.image}`} alt={post.data.title} width="600" height="372" />
+        </figure>
+      )}
+
       <div class="prose reveal">
         <Content />
       </div>
